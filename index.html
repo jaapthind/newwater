@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#000000">
+    <meta name="theme-color" content="#020202">
     <title>Squirrel Water Squirter - Stop Squirrel Climb</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,72 +13,67 @@
 
     <style>
         /* ==========================================================================
-           1. CORE TOKENS & VARIABLES (APPLE DESIGN SYSTEM)
+           1. ADVANCED DESIGN TOKENS & VARIABLES
            ========================================================================== */
         :root {
             /* Typography */
             --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
             --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
             
-            /* Core Colors */
+            /* Color Palette */
             --color-black: #000000;
             --color-white: #ffffff;
-            --color-gray-100: #f5f5f7;
-            --color-gray-200: #e5e5ea;
-            --color-gray-300: #d1d1d6;
-            --color-gray-400: #c7c7cc;
-            --color-gray-500: #aeaeb2;
-            --color-gray-600: #8e8e93;
-            --color-gray-700: #636366;
-            --color-gray-800: #48484a;
-            --color-gray-900: #1c1c1e;
+            --color-bg-base: #020202; /* Extremely dark for glass contrast */
             
             /* Text Colors */
-            --text-primary: #f5f5f7;
-            --text-secondary: #a1a1a6;
-            --text-tertiary: #86868b;
+            --text-primary: rgba(255, 255, 255, 0.95);
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-tertiary: rgba(255, 255, 255, 0.5);
             
-            /* iOS Glass Variables (Extremely Thick & Clear) */
-            --glass-bg-solid: rgba(28, 28, 30, 0.35);
-            --glass-bg-light: rgba(255, 255, 255, 0.05);
-            --glass-bg-highlight: rgba(255, 255, 255, 0.1);
+            /* EXACT iOS LIQUID GLASS REPLICATION (Thick & Clear)
+               Reference: Highly blurred background, very subtle white tint, 
+               strong white top/left borders, thick inner highlight.
+            */
+            --glass-bg: rgba(255, 255, 255, 0.03); /* Almost fully transparent */
+            --glass-bg-hover: rgba(255, 255, 255, 0.08);
             
-            --glass-blur-extreme: blur(120px);
-            --glass-blur-heavy: blur(80px);
-            --glass-blur-medium: blur(40px);
-            --glass-saturate: saturate(250%);
+            --glass-blur: blur(50px);
+            --glass-saturate: saturate(180%);
             
-            --glass-border-top: rgba(255, 255, 255, 0.25);
-            --glass-border-side: rgba(255, 255, 255, 0.1);
-            --glass-border-bottom: rgba(0, 0, 0, 0.6);
+            /* Outer Borders (Crisp & Clear) */
+            --glass-border-top: rgba(255, 255, 255, 0.35);
+            --glass-border-left: rgba(255, 255, 255, 0.25);
+            --glass-border-right: rgba(255, 255, 255, 0.1);
+            --glass-border-bottom: rgba(255, 255, 255, 0.05);
             
-            --glass-shadow-ambient: 0 40px 80px rgba(0, 0, 0, 0.5);
-            --glass-shadow-inner: inset 0 1px 1px rgba(255, 255, 255, 0.25), inset 0 -1px 1px rgba(0, 0, 0, 0.4);
+            /* Depth & Thickness Shadows */
+            --glass-shadow-drop: 0 30px 60px rgba(0, 0, 0, 0.6), 0 10px 20px rgba(0, 0, 0, 0.4);
+            --glass-shadow-inner-thick: inset 0 2px 3px rgba(255, 255, 255, 0.3), inset 0 -1px 2px rgba(0, 0, 0, 0.5);
             
-            /* Layout & Spacing */
-            --layout-max-width: 1600px;
-            --layout-left-col: 48%;
-            --layout-gap: 32px;
+            /* Layout Dimensions */
+            --layout-max-width: 1400px;
+            --layout-left-col: 45%;
+            --layout-right-col: 55%;
+            --layout-gap: 40px;
             --layout-padding: 40px;
             
             /* Radii */
-            --radius-xs: 8px;
-            --radius-sm: 16px;
-            --radius-md: 24px;
+            --radius-sm: 12px;
+            --radius-md: 20px;
             --radius-lg: 32px;
-            --radius-xl: 48px;
+            --radius-xl: 40px;
             --radius-pill: 9999px;
 
-            /* Transitions */
+            /* Animation Easing */
             --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-            --ease-in-out-sine: cubic-bezier(0.445, 0.05, 0.55, 0.95);
+            --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
             --duration-fast: 0.2s;
             --duration-normal: 0.4s;
             --duration-slow: 0.8s;
         }
 
         /* ==========================================================================
-           2. RESET & BASE
+           2. RESET & BASE DOCUMENT SETUP
            ========================================================================== */
         *, *::before, *::after {
             box-sizing: border-box;
@@ -88,7 +83,7 @@
 
         html {
             font-family: var(--font-system);
-            background-color: var(--color-black);
+            background-color: var(--color-bg-base);
             color: var(--text-primary);
             font-size: 16px;
             line-height: 1.5;
@@ -99,23 +94,22 @@
         }
 
         body {
-            /* CRITICAL FIX: 
-               Removed flex/center on body so normal document flow is restored. 
-               This ensures window scrolling and position: sticky work flawlessly. 
-            */
             display: block; 
             min-height: 100vh;
+            width: 100vw;
             overflow-x: hidden;
-            overscroll-behavior-y: none;
+            /* Prevent elastic scroll on body */
+            overscroll-behavior-y: none; 
+            position: relative;
         }
 
         a { text-decoration: none; color: inherit; }
         ul, ol { list-style: none; }
         button { background: none; border: none; font: inherit; cursor: pointer; color: inherit; }
-        img, svg { display: block; max-width: 100%; }
+        img, svg { display: block; max-width: 100%; height: auto; }
 
         /* ==========================================================================
-           3. ADVANCED AMBIENT CANVAS BACKGROUND
+           3. AMBIENT CANVAS & NOISE BACKGROUND
            ========================================================================== */
         #ambient-canvas {
             position: fixed;
@@ -125,7 +119,7 @@
             height: 100vh;
             z-index: -2;
             pointer-events: none;
-            background-color: #030303; 
+            background-color: var(--color-bg-base); 
         }
 
         .noise-overlay {
@@ -136,73 +130,94 @@
             height: 100vh;
             z-index: -1;
             pointer-events: none;
-            opacity: 0.05;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.06;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            mix-blend-mode: overlay;
         }
 
         /* ==========================================================================
-           4. LIQUID GLASS UTILITIES
+           4. LIQUID GLASS UTILITY CLASSES (THE "THICK & CLEAR" EFFECT)
            ========================================================================== */
         .liquid-glass {
-            background-color: var(--glass-bg-solid);
-            backdrop-filter: var(--glass-blur-extreme) var(--glass-saturate);
-            -webkit-backdrop-filter: var(--glass-blur-extreme) var(--glass-saturate);
+            background-color: var(--glass-bg);
+            backdrop-filter: var(--glass-blur) var(--glass-saturate);
+            -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+            
+            /* Precise borders for the cut-glass look */
             border-top: 1px solid var(--glass-border-top);
-            border-left: 1px solid var(--glass-border-side);
-            border-right: 1px solid var(--glass-border-side);
+            border-left: 1px solid var(--glass-border-left);
+            border-right: 1px solid var(--glass-border-right);
             border-bottom: 1px solid var(--glass-border-bottom);
-            box-shadow: var(--glass-shadow-ambient), var(--glass-shadow-inner);
+            
+            box-shadow: var(--glass-shadow-drop), var(--glass-shadow-inner-thick);
+            border-radius: var(--radius-lg);
             position: relative;
+            z-index: 10;
+            transform: translateZ(0); /* Hardware accel for blur */
             overflow: hidden;
-            transform: translateZ(0); /* Hardware acceleration */
+            width: 100%; /* Prevents cutoff */
         }
 
-        /* Ambient top reflection */
-        .liquid-glass::after {
+        /* The glossy sheen across the top of the glass */
+        .liquid-glass::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; right: 0; height: 120px;
-            background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+            top: 0; left: 0; right: 0; height: 50%;
+            background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 100%);
+            border-radius: inherit;
             pointer-events: none;
-            z-index: 10;
+            z-index: -1;
+        }
+
+        /* Optional interaction state for buttons/cards */
+        .liquid-glass-interactive {
+            transition: all var(--duration-fast) var(--ease-out-expo);
+            cursor: pointer;
+        }
+
+        .liquid-glass-interactive:hover {
+            background-color: var(--glass-bg-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.7), var(--glass-shadow-inner-thick);
         }
 
         /* ==========================================================================
-           5. TYPOGRAPHY
+           5. TYPOGRAPHY SYSTEM
            ========================================================================== */
-        .text-hero {
-            font-size: clamp(40px, 4.5vw, 68px);
-            line-height: 1.05;
+        .text-display {
+            font-size: clamp(36px, 5vw, 64px);
+            line-height: 1.1;
             font-weight: 800;
             letter-spacing: -0.02em;
-            color: var(--color-white);
+            color: var(--text-primary);
+            text-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
 
-        .text-hero-gradient {
-            background: linear-gradient(135deg, #ffffff 0%, rgba(255,255,255,0.6) 100%);
+        .text-display-gradient {
+            background: linear-gradient(180deg, #ffffff 0%, rgba(255,255,255,0.7) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        .text-title-3 {
-            font-size: 20px;
+        .text-title {
+            font-size: clamp(20px, 2.5vw, 28px);
             line-height: 1.2;
             font-weight: 700;
-            color: var(--color-white);
+            color: var(--text-primary);
             letter-spacing: -0.01em;
         }
 
         .text-body-large {
-            font-size: 21px;
-            line-height: 1.4;
+            font-size: clamp(18px, 2vw, 22px);
+            line-height: 1.5;
             font-weight: 500;
             color: var(--text-secondary);
-            letter-spacing: -0.01em;
+            letter-spacing: -0.005em;
         }
 
         .text-body {
-            font-size: 15px;
+            font-size: 16px;
             line-height: 1.5;
             font-weight: 500;
             color: var(--text-secondary);
@@ -211,29 +226,32 @@
         .text-caption {
             font-size: 13px;
             line-height: 1.4;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--text-tertiary);
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.12em;
         }
 
         /* ==========================================================================
-           6. SPLIT LAYOUT (LEFT FIXED, RIGHT SCROLLS)
+           6. MASTER LAYOUT STRUCTURE
+           Responsive, non-breaking split layout.
            ========================================================================== */
-        .master-container {
+        .layout-wrapper {
             display: flex;
-            align-items: flex-start; /* Crucial: ensures children can define their own heights and sticky works */
+            flex-wrap: wrap; /* Allows stacking on mobile */
             width: 100%;
             max-width: var(--layout-max-width);
             margin: 0 auto;
+            min-height: 100vh;
             position: relative;
         }
 
-        /* --- LEFT COLUMN: Strictly Locked --- */
+        /* --- LEFT COLUMN: FIXED POSTER --- */
         .col-left {
-            width: var(--layout-left-col);
+            flex: 0 0 var(--layout-left-col);
+            max-width: var(--layout-left-col);
             height: 100vh;
-            position: sticky; /* Locks it to the viewport */
+            position: sticky;
             top: 0;
             display: flex;
             align-items: center;
@@ -242,80 +260,58 @@
             z-index: 50;
         }
 
-        .poster-showcase {
+        .poster-container {
             width: 100%;
             height: 100%;
-            max-height: 80vh; /* Keeps it perfectly proportioned */
+            max-height: 85vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 32px;
             border-radius: var(--radius-xl);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px;
-            perspective: 1000px;
-        }
-
-        .poster-image-wrapper {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            transform-style: preserve-3d;
         }
 
         .poster-image {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Prevents stretching */
             border-radius: var(--radius-md);
-            box-shadow: 0 50px 100px rgba(0,0,0,0.6), 0 15px 35px rgba(0,0,0,0.4);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8), 0 10px 20px rgba(0,0,0,0.5);
             position: relative;
             z-index: 2;
-            transform: translateZ(30px);
         }
 
-        .poster-glow {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 90%;
-            height: 90%;
-            transform: translate(-50%, -50%) translateZ(0);
-            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 60%);
-            filter: blur(50px);
-            z-index: 1;
-        }
-
-        /* --- RIGHT COLUMN: Scrolls Freely --- */
+        /* --- RIGHT COLUMN: SCROLLING CONTENT --- */
         .col-right {
-            width: calc(100% - var(--layout-left-col));
-            /* Force scrolling by padding top and bottom significantly */
-            min-height: 120vh; 
-            padding: 15vh var(--layout-padding) 25vh var(--layout-padding);
+            flex: 0 0 var(--layout-right-col);
+            max-width: var(--layout-right-col);
+            min-height: 100vh;
+            padding: var(--layout-padding);
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: flex-start;
+            justify-content: center; /* Center vertically on large screens */
             z-index: 40;
         }
 
+        /* Spacer to allow scrolling past the fixed element */
+        .scroll-spacer-top { height: 10vh; width: 100%; }
+        .scroll-spacer-bottom { height: 10vh; width: 100%; }
+
         /* ==========================================================================
-           7. COMBINED CONTENT PANEL
+           7. CONTENT COMPONENTS
            ========================================================================== */
+        
+        /* Unified Right Panel */
         .unified-panel {
             width: 100%;
-            max-width: 720px;
-            border-radius: var(--radius-xl);
-            padding: 56px 48px;
+            padding: 48px;
             display: flex;
             flex-direction: column;
             gap: 48px;
-            margin: auto 0;
         }
 
-        /* Hero Section Inside Panel */
-        .panel-hero-section {
+        /* Hero Header Area */
+        .header-area {
             display: flex;
             flex-direction: column;
             gap: 24px;
@@ -327,15 +323,16 @@
             font-size: 32px;
             font-weight: 700;
             color: var(--color-white);
-            background: rgba(255,255,255,0.08);
-            padding: 12px 28px;
+            background: rgba(255,255,255,0.05);
+            padding: 12px 24px;
             border-radius: var(--radius-pill);
             border: 1px solid rgba(255,255,255,0.15);
-            box-shadow: inset 0 1px 1px rgba(255,255,255,0.2);
+            box-shadow: inset 0 1px 1px rgba(255,255,255,0.1);
             align-self: flex-start;
         }
 
-        .btn-primary {
+        /* Buy Button */
+        .btn-buy {
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -346,89 +343,82 @@
             letter-spacing: -0.01em;
             background: var(--color-white);
             color: var(--color-black);
-            box-shadow: 0 10px 30px rgba(255,255,255,0.2);
+            box-shadow: 0 10px 30px rgba(255,255,255,0.15);
             transition: all var(--duration-fast) var(--ease-out-expo);
-            cursor: pointer;
             gap: 12px;
             align-self: flex-start;
-            text-decoration: none;
         }
 
-        .btn-primary:hover {
-            transform: scale(1.03);
+        .btn-buy:hover {
+            transform: scale(1.04);
             box-shadow: 0 15px 40px rgba(255,255,255,0.3);
-            background: #f5f5f7;
+            background: #f0f0f0;
         }
 
-        .btn-primary:active {
-            transform: scale(0.97);
-        }
+        .btn-buy:active { transform: scale(0.98); }
 
-        /* Divider */
-        .glass-divider {
+        /* Glass Divider */
+        .divider {
             height: 1px;
             width: 100%;
-            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0) 100%);
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
             border: none;
             margin: 0;
         }
 
-        /* Creators & Contacts Unified Grid */
-        .info-grid-unified {
+        /* Unified Grid for Info (Creators & Contacts) */
+        .info-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 40px;
+            width: 100%;
         }
 
-        /* Sub-sections */
-        .creator-block, .contact-block {
+        .info-section {
             display: flex;
             flex-direction: column;
-            gap: 24px;
+            gap: 20px;
+            width: 100%;
         }
 
-        .creator-item, .contact-item {
+        /* Generic Item Card (Used for both Creators & Contacts) */
+        .item-card {
             display: flex;
             align-items: center;
             gap: 16px;
             padding: 20px;
-            background: rgba(0,0,0,0.2);
+            background: rgba(0,0,0,0.3);
             border-radius: var(--radius-md);
             border: 1px solid rgba(255,255,255,0.05);
-            transition: transform var(--duration-fast), background var(--duration-fast);
+            box-shadow: inset 0 1px 1px rgba(255,255,255,0.05);
+            width: 100%;
         }
 
-        .creator-item:hover, .contact-item:hover {
-            transform: translateX(8px);
-            background: rgba(255,255,255,0.03);
-            border-color: rgba(255,255,255,0.15);
-        }
-
-        /* Avatars */
-        .avatar-ring {
+        /* Avatar Styling */
+        .avatar-wrap {
             width: 64px;
             height: 64px;
             border-radius: 50%;
             padding: 2px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.2));
+            background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.1));
             box-shadow: 0 8px 24px rgba(0,0,0,0.4);
             flex-shrink: 0;
         }
 
-        .creator-avatar {
+        .avatar-img {
             width: 100%;
             height: 100%;
             border-radius: 50%;
             object-fit: cover;
-            background-color: var(--color-gray-800);
+            background-color: #222;
         }
 
-        /* Contact Icons */
-        .contact-icon {
+        /* Icon Styling */
+        .icon-wrap {
             width: 48px;
             height: 48px;
             background: var(--color-white);
-            border-radius: 12px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -437,21 +427,29 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
-        .contact-icon svg {
-            width: 22px;
-            height: 22px;
+        .icon-wrap svg {
+            width: 24px;
+            height: 24px;
             stroke-width: 2;
         }
 
-        .contact-text a {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--color-white);
-            text-decoration: none;
-            position: relative;
+        /* Item Text */
+        .item-content {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            overflow: hidden; /* Prevent text blowout */
         }
 
-        .contact-text a::after {
+        .item-link {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--color-white);
+            position: relative;
+            align-self: flex-start;
+        }
+
+        .item-link::after {
             content: '';
             position: absolute;
             width: 100%;
@@ -462,79 +460,98 @@
             transition: background-color var(--duration-fast);
         }
 
-        .contact-text a:hover::after {
+        .item-link:hover::after {
             background-color: var(--color-white);
         }
 
         /* ==========================================================================
            8. ANIMATIONS
            ========================================================================== */
-        .reveal-element {
+        .reveal {
             opacity: 0;
             transform: translateY(20px);
             transition: opacity 1s var(--ease-out-expo), transform 1s var(--ease-out-expo);
             will-change: opacity, transform;
         }
 
-        .reveal-element.is-visible {
+        .reveal.is-visible {
             opacity: 1;
             transform: translateY(0);
         }
 
-        .delay-1 { transition-delay: 0.1s; }
-        .delay-2 { transition-delay: 0.2s; }
-        .delay-3 { transition-delay: 0.3s; }
-        .delay-4 { transition-delay: 0.4s; }
+        .d-1 { transition-delay: 0.1s; }
+        .d-2 { transition-delay: 0.2s; }
+        .d-3 { transition-delay: 0.3s; }
+        .d-4 { transition-delay: 0.4s; }
 
         /* ==========================================================================
-           9. RESPONSIVE DESIGN
+           9. RESPONSIVE DESIGN (PREVENTING CUTOFFS & BREAKING)
            ========================================================================== */
         @media (max-width: 1200px) {
-            .info-grid-unified {
-                grid-template-columns: 1fr;
+            :root {
+                --layout-padding: 32px;
             }
+            .unified-panel { padding: 40px 32px; }
+            .info-grid { grid-template-columns: 1fr; } /* Stack columns earlier */
         }
 
         @media (max-width: 1024px) {
-            .master-container {
+            /* Break the sticky layout, stack vertically */
+            .layout-wrapper {
                 flex-direction: column;
                 align-items: center;
+                flex-wrap: nowrap;
             }
-            :root {
-                --layout-left-col: 100%;
-                --layout-padding: 24px;
+            
+            .col-left, .col-right {
+                flex: none;
+                max-width: 100%;
+                width: 100%;
             }
+
             .col-left {
                 position: relative;
                 height: auto;
-                min-height: 60vh;
-                padding-bottom: 0;
+                min-height: 50vh;
+                padding-bottom: 0; /* Remove bottom padding to pull right col up */
                 z-index: 10;
             }
+
+            .poster-container {
+                max-height: 60vh;
+            }
+
             .col-right {
-                width: 100%;
-                padding: var(--layout-gap) var(--layout-padding) 10vh var(--layout-padding);
                 min-height: auto;
+                padding: var(--layout-gap) var(--layout-padding) 60px var(--layout-padding);
                 z-index: 20;
             }
-            .unified-panel {
-                padding: 40px 32px;
+
+            .scroll-spacer-top, .scroll-spacer-bottom {
+                display: none; /* Not needed in stacked view */
             }
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 600px) {
+            :root {
+                --layout-padding: 20px;
+            }
             .unified-panel {
-                padding: 32px 24px;
+                padding: 32px 20px;
+                gap: 32px;
             }
-            .text-hero {
-                font-size: 42px;
-            }
-            .btn-primary {
-                width: 100%;
+            .btn-buy {
+                width: 100%; /* Full width button on mobile */
             }
             .price-badge {
-                width: 100%;
+                align-self: center; /* Center on mobile */
+            }
+            .header-area {
+                align-items: center;
                 text-align: center;
+            }
+            .btn-buy {
+                align-self: center;
             }
         }
     </style>
@@ -544,141 +561,173 @@
     <canvas id="ambient-canvas"></canvas>
     <div class="noise-overlay"></div>
 
-    <div class="master-container">
+    <div class="layout-wrapper">
         
         <aside class="col-left">
-            <div class="poster-showcase liquid-glass reveal-element is-visible" id="tilt-poster">
-                <div class="poster-glow"></div>
-                <div class="poster-image-wrapper">
-                    <img src="Poster.png" alt="Squirrel Water Squirter" class="poster-image" 
-                         onerror="this.src='data:image/svg+xml;utf8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 800 1200\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23333\' rx=\'20\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-family=\'sans-serif\' font-size=\'40\' fill=\'%23fff\' text-anchor=\'middle\'%3EPoster.png%3C/text%3E%3C/svg%3E'">
-                </div>
+            <div class="poster-container liquid-glass reveal is-visible">
+                <img src="Poster.png" alt="Squirrel Water Squirter" class="poster-image" 
+                     onerror="this.src='data:image/svg+xml;utf8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 800 1000\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23111\' rx=\'20\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-family=\'sans-serif\' font-size=\'40\' fill=\'%23555\' text-anchor=\'middle\'%3EPoster Image%3C/text%3E%3C/svg%3E'">
             </div>
         </aside>
 
         <main class="col-right">
+            <div class="scroll-spacer-top"></div>
             
-            <section class="unified-panel liquid-glass reveal-element is-visible">
+            <section class="unified-panel liquid-glass reveal">
                 
-                <div class="panel-hero-section">
-                    <span class="text-caption delay-1 reveal-element is-visible">Stop Squirrel Climb</span>
-                    <h1 class="text-hero text-hero-gradient delay-1 reveal-element is-visible">Squirrel<br>Water Squirter.</h1>
-                    <p class="text-body-large delay-2 reveal-element is-visible">
+                <div class="header-area">
+                    <span class="text-caption reveal d-1">Stop Squirrel Climb</span>
+                    <h1 class="text-display text-display-gradient reveal d-1">Squirrel<br>Water Squirter.</h1>
+                    <p class="text-body-large reveal d-2">
                         Secure your fruit. Save your harvest. The ultimate professional-grade defense system designed in Berkeley.
                     </p>
                     
-                    <div class="delay-2 reveal-element is-visible" style="margin-top: 16px; display: flex; flex-direction: column; gap: 20px;">
+                    <div class="reveal d-2" style="margin-top: 16px; display: flex; flex-direction: column; gap: 24px; width: 100%;">
                         <div class="price-badge">$28.99</div>
-                        <a href="sms:5103128640" class="btn-primary">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        <a href="sms:5103128640" class="btn-buy">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                             Order via Text
                         </a>
                     </div>
                 </div>
 
-                <hr class="glass-divider delay-3 reveal-element is-visible">
+                <hr class="divider reveal d-3">
 
-                <div class="info-grid-unified delay-3 reveal-element is-visible">
+                <div class="info-grid reveal d-3">
                     
-                    <div class="creator-block">
+                    <div class="info-section">
                         <span class="text-caption">The Creators</span>
                         
-                        <div class="creator-item">
-                            <div class="avatar-ring">
-                                <img src="Jaap.jpg" alt="Jaap" class="creator-avatar" onerror="this.src='data:image/svg+xml;utf8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'50\' fill=\'%23444\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-family=\'sans-serif\' font-size=\'20\' fill=\'%23fff\' text-anchor=\'middle\' dy=\'.3em\'%3EJaap%3C/text%3E%3C/svg%3E'">
+                        <div class="item-card liquid-glass-interactive">
+                            <div class="avatar-wrap">
+                                <img src="Jaap.jpg" alt="Jaap Thind" class="avatar-img" 
+                                     onerror="this.src='data:image/svg+xml;utf8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23333\'/%3E%3C/svg%3E'">
                             </div>
-                            <div>
-                                <h3 class="text-title-3">Jaap</h3>
+                            <div class="item-content">
+                                <h3 class="text-title">Jaap</h3>
                                 <p class="text-body" style="font-size: 14px;">Designed in Berkeley to save family fruit trees.</p>
                             </div>
                         </div>
 
-                        <div class="creator-item">
-                            <div class="avatar-ring">
-                                <img src="Sevak.png" alt="Sevak" class="creator-avatar" onerror="this.src='data:image/svg+xml;utf8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'50\' fill=\'%23444\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-family=\'sans-serif\' font-size=\'20\' fill=\'%23fff\' text-anchor=\'middle\' dy=\'.3em\'%3ESevak%3C/text%3E%3C/svg%3E'">
+                        <div class="item-card liquid-glass-interactive">
+                            <div class="avatar-wrap">
+                                <img src="Sevak.png" alt="Sevak Singh" class="avatar-img" 
+                                     onerror="this.src='data:image/svg+xml;utf8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23333\'/%3E%3C/svg%3E'">
                             </div>
-                            <div>
-                                <h3 class="text-title-3">Sevak</h3>
+                            <div class="item-content">
+                                <h3 class="text-title">Sevak</h3>
                                 <p class="text-body" style="font-size: 14px;">Partnering to engineer robust hardware.</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="contact-block">
+                    <div class="info-section">
                         <span class="text-caption">Schedule Setup</span>
                         
-                        <div class="contact-item">
-                            <div class="contact-icon">
+                        <div class="item-card liquid-glass-interactive">
+                            <div class="icon-wrap">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                             </div>
-                            <div class="contact-text">
-                                <span class="text-caption" style="display:block;">Phone</span>
-                                <a href="sms:5103128640">510-312-8640</a>
+                            <div class="item-content">
+                                <span class="text-caption">Phone</span>
+                                <a href="sms:5103128640" class="item-link">510-312-8640</a>
                             </div>
                         </div>
 
-                        <div class="contact-item">
-                            <div class="contact-icon">
+                        <div class="item-card liquid-glass-interactive">
+                            <div class="icon-wrap">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                             </div>
-                            <div class="contact-text">
-                                <span class="text-caption" style="display:block;">Email</span>
-                                <a href="mailto:stopsquirrelclimb@gmail.com">stopsquirrelclimb@gmail.com</a>
+                            <div class="item-content">
+                                <span class="text-caption">Email</span>
+                                <a href="mailto:stopsquirrelclimb@gmail.com" class="item-link" style="word-break: break-all;">stopsquirrelclimb<wbr>@gmail.com</a>
                             </div>
                         </div>
                     </div>
 
                 </div>
             </section>
-
+            
+            <div class="scroll-spacer-bottom"></div>
         </main>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
-            // --- Advanced iOS Rainbow Mesh Background ---
+            // --- 1. Intersection Observer for Reveal Animations ---
+            const revealElements = document.querySelectorAll('.reveal');
+            
+            // Set up observer
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px 0px -5% 0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, observerOptions);
+
+            revealElements.forEach(el => observer.observe(el));
+
+            // Force initial reveal for top elements
+            setTimeout(() => {
+                revealElements.forEach(el => {
+                    if(el.getBoundingClientRect().top < window.innerHeight) {
+                        el.classList.add('is-visible');
+                    }
+                });
+            }, 100);
+
+
+            // --- 2. Advanced Ambient Canvas Background ---
             const canvas = document.getElementById('ambient-canvas');
-            const ctx = canvas.getContext('2d');
+            const ctx = canvas.getContext('2d', { alpha: false }); // Optimize
             
             let width, height;
             
-            // Highly vibrant Apple-esque gradient palette
+            // Refined dark-mode neon color palette
             const colors = [
                 { r: 255, g: 42,  b: 95  }, // Red/Pink
                 { r: 255, g: 122, b: 0   }, // Orange
                 { r: 52,  g: 199, b: 89  }, // Green
                 { r: 0,   g: 210, b: 255 }, // Cyan
                 { r: 88,  g: 86,  b: 214 }, // Purple
-                { r: 255, g: 204, b: 0   }  // Yellow
+                { r: 32,  g: 32,  b: 40  }  // Dark Blue/Grey base
             ];
 
             class Orb {
                 constructor(colorIdx) {
                     this.color = colors[colorIdx];
                     this.angle = Math.random() * Math.PI * 2;
-                    this.speed = 0.001 + Math.random() * 0.002;
-                    this.radiusMult = 0.6 + Math.random() * 0.5;
-                    this.offsetX = Math.random() * 1000;
-                    this.offsetY = Math.random() * 1000;
+                    this.speed = 0.0005 + Math.random() * 0.001; // Slower, elegant movement
+                    this.radiusMult = 0.5 + Math.random() * 0.6;
+                    this.offsetX = Math.random() * 100;
+                    this.offsetY = Math.random() * 100;
                 }
 
                 update(time) {
                     const minDim = Math.min(width, height);
-                    this.radius = minDim * this.radiusMult * 1.5;
+                    // Very large radius for deep blur simulation
+                    this.radius = minDim * this.radiusMult * 1.8; 
                     
-                    // Complex Lissajous curve for organic movement
                     const nx = Math.sin(time * this.speed + this.offsetX);
                     const ny = Math.cos(time * (this.speed * 1.2) + this.offsetY);
                     
-                    this.x = (width / 2) + nx * (width * 0.4);
-                    this.y = (height / 2) + ny * (height * 0.4);
+                    this.x = (width / 2) + nx * (width * 0.5);
+                    this.y = (height / 2) + ny * (height * 0.5);
                 }
 
                 draw(ctx) {
                     const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius);
-                    gradient.addColorStop(0, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0.85)`);
-                    gradient.addColorStop(0.4, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0.4)`);
+                    // Opacity lowered for darker, moodier background
+                    gradient.addColorStop(0, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0.6)`);
+                    gradient.addColorStop(0.5, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0.2)`);
                     gradient.addColorStop(1, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0)`);
                     
                     ctx.beginPath();
@@ -711,8 +760,12 @@
             let animationTime = 0;
             function animateCanvas() {
                 animationTime += 16; 
-                ctx.fillStyle = '#030303';
+                
+                // Base background clear
+                ctx.fillStyle = '#020202';
                 ctx.fillRect(0, 0, width, height);
+                
+                // Additive blending for vivid light mixing
                 ctx.globalCompositeOperation = 'screen';
 
                 orbs.forEach(orb => {
@@ -725,6 +778,8 @@
             }
 
             initCanvas();
+            
+            // Respect accessibility settings
             const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
             if (!prefersReducedMotion.matches) {
                 animateCanvas();
@@ -735,42 +790,21 @@
                 });
             }
 
+            // Handle Resize
             window.addEventListener('resize', () => {
                 clearTimeout(window.resizeTimer);
-                window.resizeTimer = setTimeout(initCanvas, 250);
+                window.resizeTimer = setTimeout(() => {
+                    initCanvas();
+                    if(prefersReducedMotion.matches) {
+                        ctx.fillStyle = '#020202';
+                        ctx.fillRect(0, 0, width, height);
+                        orbs.forEach(orb => {
+                            orb.update(0);
+                            orb.draw(ctx);
+                        });
+                    }
+                }, 250);
             });
-
-            // --- Subtle 3D Tilt Effect for Poster ---
-            const tiltBox = document.getElementById('tilt-poster');
-            const tiltMax = 12; // Degrees 
-
-            if(window.matchMedia("(hover: hover)").matches && !prefersReducedMotion.matches) {
-                tiltBox.addEventListener('mousemove', (e) => {
-                    const rect = tiltBox.getBoundingClientRect();
-                    const width = tiltBox.offsetWidth;
-                    const height = tiltBox.offsetHeight;
-                    const centerX = rect.left + width / 2;
-                    const centerY = rect.top + height / 2;
-                    
-                    const mouseX = e.clientX - centerX;
-                    const mouseY = e.clientY - centerY;
-                    
-                    const rotateX = (mouseY / (height / 2)) * -tiltMax;
-                    const rotateY = (mouseX / (width / 2)) * tiltMax;
-
-                    tiltBox.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-                    tiltBox.style.transition = 'transform 0.1s ease-out';
-                });
-
-                tiltBox.addEventListener('mouseleave', () => {
-                    tiltBox.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg)';
-                    tiltBox.style.transition = 'transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-                });
-                
-                tiltBox.addEventListener('mouseenter', () => {
-                    tiltBox.style.transition = 'transform 0.1s ease-out';
-                });
-            }
 
         });
     </script>
