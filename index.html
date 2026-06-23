@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Squirrel Water Squirter | Pro Garden Defense</title>
+    <meta name="theme-color" content="#000000">
+    <title>Squirrel Water Squirter</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,7 +20,7 @@
             --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
             --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
             
-            /* Core Colors - Dark Mode Default */
+            /* Core Colors */
             --color-black: #000000;
             --color-white: #ffffff;
             --color-gray-100: #f5f5f7;
@@ -34,43 +35,44 @@
             
             /* Text Colors */
             --text-primary: #f5f5f7;
-            --text-secondary: #86868b;
-            --text-tertiary: #424245;
+            --text-secondary: #a1a1a6;
+            --text-tertiary: #86868b;
             
             /* iOS Glass Variables (Extremely Thick & Clear) */
-            --glass-bg-solid: rgba(28, 28, 30, 0.4);
+            --glass-bg-solid: rgba(28, 28, 30, 0.35);
             --glass-bg-light: rgba(255, 255, 255, 0.05);
             --glass-bg-highlight: rgba(255, 255, 255, 0.1);
             
-            --glass-blur-heavy: blur(80px);
+            --glass-blur-extreme: blur(100px);
+            --glass-blur-heavy: blur(60px);
             --glass-blur-medium: blur(40px);
-            --glass-saturate: saturate(200%);
+            --glass-saturate: saturate(250%);
             
-            --glass-border-top: rgba(255, 255, 255, 0.15);
-            --glass-border-side: rgba(255, 255, 255, 0.05);
-            --glass-border-bottom: rgba(0, 0, 0, 0.5);
+            --glass-border-top: rgba(255, 255, 255, 0.2);
+            --glass-border-side: rgba(255, 255, 255, 0.08);
+            --glass-border-bottom: rgba(0, 0, 0, 0.6);
             
-            --glass-shadow-ambient: 0 30px 60px rgba(0, 0, 0, 0.4);
-            --glass-shadow-inner: inset 0 1px 1px rgba(255, 255, 255, 0.15), inset 0 -1px 1px rgba(0, 0, 0, 0.2);
+            --glass-shadow-ambient: 0 40px 80px rgba(0, 0, 0, 0.5);
+            --glass-shadow-inner: inset 0 1px 1px rgba(255, 255, 255, 0.2), inset 0 -1px 1px rgba(0, 0, 0, 0.3);
             
             /* Layout & Spacing */
             --layout-max-width: 1600px;
             --layout-left-col: 45%;
-            --layout-gap: 40px;
+            --layout-gap: 32px;
             --layout-padding: 40px;
             
             /* Radii */
             --radius-xs: 8px;
-            --radius-sm: 12px;
-            --radius-md: 20px;
+            --radius-sm: 16px;
+            --radius-md: 24px;
             --radius-lg: 32px;
-            --radius-xl: 44px;
+            --radius-xl: 48px;
             --radius-pill: 9999px;
 
             /* Transitions */
             --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
             --ease-in-out-sine: cubic-bezier(0.445, 0.05, 0.55, 0.95);
-            --ease-spring: cubic-bezier(0.25, 1.5, 0.5, 1);
+            --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
             --duration-fast: 0.2s;
             --duration-normal: 0.4s;
             --duration-slow: 0.8s;
@@ -100,8 +102,10 @@
         body {
             min-height: 100vh;
             overflow-x: hidden;
-            /* Disable overscroll bounce for native app feel */
             overscroll-behavior-y: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         a { text-decoration: none; color: inherit; }
@@ -110,7 +114,7 @@
         img, svg { display: block; max-width: 100%; }
 
         /* ==========================================================================
-           3. ADVANCED AMBIENT CANVAS BACKGROUND (iOS Rainbow Mesh)
+           3. ADVANCED AMBIENT CANVAS BACKGROUND
            ========================================================================== */
         #ambient-canvas {
             position: fixed;
@@ -120,11 +124,9 @@
             height: 100vh;
             z-index: -2;
             pointer-events: none;
-            /* Deep baseline to mix with rainbow colors */
-            background-color: #050505; 
+            background-color: #030303; 
         }
 
-        /* Background Noise Overlay for texture */
         .noise-overlay {
             position: fixed;
             top: 0;
@@ -133,8 +135,8 @@
             height: 100vh;
             z-index: -1;
             pointer-events: none;
-            opacity: 0.04;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.05;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
         /* ==========================================================================
@@ -142,8 +144,8 @@
            ========================================================================== */
         .liquid-glass {
             background-color: var(--glass-bg-solid);
-            backdrop-filter: var(--glass-blur-heavy) var(--glass-saturate);
-            -webkit-backdrop-filter: var(--glass-blur-heavy) var(--glass-saturate);
+            backdrop-filter: var(--glass-blur-extreme) var(--glass-saturate);
+            -webkit-backdrop-filter: var(--glass-blur-extreme) var(--glass-saturate);
             border-top: 1px solid var(--glass-border-top);
             border-left: 1px solid var(--glass-border-side);
             border-right: 1px solid var(--glass-border-side);
@@ -154,12 +156,11 @@
             transform: translateZ(0);
         }
 
-        /* Ambient specular highlight */
         .liquid-glass::after {
             content: '';
             position: absolute;
-            top: 0; left: 0; right: 0; height: 100px;
-            background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 100%);
+            top: 0; left: 0; right: 0; height: 120px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 100%);
             pointer-events: none;
             z-index: 10;
         }
@@ -168,74 +169,54 @@
            5. TYPOGRAPHY
            ========================================================================== */
         .text-hero {
-            font-size: clamp(48px, 6vw, 96px);
+            font-size: clamp(40px, 5vw, 72px);
             line-height: 1.05;
-            font-weight: 700;
-            letter-spacing: -0.015em;
+            font-weight: 800;
+            letter-spacing: -0.02em;
             color: var(--color-white);
         }
 
         .text-hero-gradient {
-            background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.6) 100%);
+            background: linear-gradient(135deg, #ffffff 0%, rgba(255,255,255,0.7) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        .text-title-1 {
-            font-size: clamp(32px, 4vw, 56px);
-            line-height: 1.1;
-            font-weight: 700;
-            letter-spacing: -0.01em;
-        }
-
-        .text-title-2 {
-            font-size: clamp(24px, 3vw, 40px);
-            line-height: 1.15;
-            font-weight: 600;
-            letter-spacing: -0.005em;
-        }
-
         .text-title-3 {
-            font-size: 24px;
-            line-height: 1.2;
-            font-weight: 600;
-            color: var(--color-white);
-        }
-
-        .text-headline {
             font-size: 20px;
-            line-height: 1.4;
-            font-weight: 600;
+            line-height: 1.2;
+            font-weight: 700;
             color: var(--color-white);
+            letter-spacing: -0.01em;
         }
 
         .text-body-large {
             font-size: 22px;
-            line-height: 1.5;
-            font-weight: 400;
+            line-height: 1.4;
+            font-weight: 500;
             color: var(--text-secondary);
-            letter-spacing: 0.01em;
+            letter-spacing: -0.01em;
         }
 
         .text-body {
-            font-size: 17px;
+            font-size: 15px;
             line-height: 1.5;
-            font-weight: 400;
+            font-weight: 500;
             color: var(--text-secondary);
         }
 
         .text-caption {
-            font-size: 14px;
+            font-size: 13px;
             line-height: 1.4;
-            font-weight: 500;
-            color: var(--text-secondary);
+            font-weight: 600;
+            color: var(--text-tertiary);
             text-transform: uppercase;
             letter-spacing: 0.1em;
         }
 
         /* ==========================================================================
-           6. MASTER LAYOUT: FIXED LEFT, SCROLLING RIGHT
+           6. MASTER LAYOUT
            ========================================================================== */
         .master-container {
             display: flex;
@@ -243,10 +224,10 @@
             max-width: var(--layout-max-width);
             margin: 0 auto;
             min-height: 100vh;
-            position: relative;
+            align-items: center;
         }
 
-        /* --- LEFT COLUMN (FIXED) --- */
+        /* --- LEFT COLUMN (FIXED POSTER) --- */
         .col-left {
             width: var(--layout-left-col);
             height: 100vh;
@@ -262,13 +243,14 @@
         .poster-showcase {
             width: 100%;
             height: 100%;
-            max-height: 80vh;
-            border-radius: var(--radius-lg);
+            max-height: 85vh;
+            border-radius: var(--radius-xl);
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 40px;
             transition: transform var(--duration-slow) var(--ease-out-expo);
+            perspective: 1000px;
         }
 
         .poster-image-wrapper {
@@ -278,200 +260,152 @@
             align-items: center;
             justify-content: center;
             position: relative;
+            transform-style: preserve-3d;
         }
 
         .poster-image {
             max-width: 100%;
             max-height: 100%;
-            object-fit: contain; /* Prevents squashing/drunk stretching perfectly */
+            object-fit: contain;
             border-radius: var(--radius-md);
-            box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 10px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 50px 100px rgba(0,0,0,0.6), 0 15px 35px rgba(0,0,0,0.4);
             position: relative;
             z-index: 2;
+            transform: translateZ(30px);
         }
 
-        /* Ambient glow behind poster */
         .poster-glow {
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 80%;
-            height: 80%;
-            transform: translate(-50%, -50%);
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
-            filter: blur(40px);
+            width: 90%;
+            height: 90%;
+            transform: translate(-50%, -50%) translateZ(0);
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 60%);
+            filter: blur(50px);
             z-index: 1;
         }
 
-        /* --- RIGHT COLUMN (SCROLLING) --- */
+        /* --- RIGHT COLUMN (COMBINED SINGLE PANEL) --- */
         .col-right {
             width: calc(100% - var(--layout-left-col));
-            min-height: 100vh;
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             padding: var(--layout-padding);
-            gap: var(--layout-gap);
-            padding-bottom: 120px; /* Space for footer/dock */
             z-index: 40;
         }
 
         /* ==========================================================================
-           7. COMPONENTS & SECTIONS
+           7. COMBINED CONTENT PANEL
            ========================================================================== */
-
-        /* Buttons */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 16px 32px;
-            border-radius: var(--radius-pill);
-            font-size: 17px;
-            font-weight: 600;
-            letter-spacing: -0.01em;
-            transition: all var(--duration-fast) var(--ease-out-expo);
-            cursor: pointer;
-            text-align: center;
-            gap: 10px;
-        }
-
-        .btn-primary {
-            background: var(--color-white);
-            color: var(--color-black);
-            box-shadow: 0 8px 24px rgba(255,255,255,0.15);
-        }
-
-        .btn-primary:hover {
-            transform: scale(1.02);
-            box-shadow: 0 12px 32px rgba(255,255,255,0.25);
-            background: #f0f0f0;
-        }
-
-        .btn-primary:active {
-            transform: scale(0.98);
-        }
-
-        .btn-secondary {
-            background: rgba(255,255,255,0.1);
-            color: var(--color-white);
-            border: 1px solid rgba(255,255,255,0.2);
-            backdrop-filter: blur(20px);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255,255,255,0.15);
-            border-color: rgba(255,255,255,0.3);
-        }
-
-        /* Cards / Panels */
-        .content-panel {
-            border-radius: var(--radius-lg);
+        .unified-panel {
+            width: 100%;
+            max-width: 800px;
+            border-radius: var(--radius-xl);
             padding: 48px;
             display: flex;
             flex-direction: column;
-            gap: 24px;
+            gap: 40px;
         }
 
-        /* Hero Panel Specifics */
-        .panel-hero {
-            min-height: 70vh;
-            justify-content: center;
-            position: relative;
+        /* Hero Section Inside Panel */
+        .panel-hero-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
         .price-badge {
             display: inline-block;
             font-family: var(--font-mono);
-            font-size: 24px;
-            font-weight: 600;
+            font-size: 32px;
+            font-weight: 700;
             color: var(--color-white);
-            background: rgba(255,255,255,0.1);
-            padding: 8px 20px;
+            background: rgba(255,255,255,0.08);
+            padding: 12px 28px;
             border-radius: var(--radius-pill);
-            border: 1px solid rgba(255,255,255,0.2);
-            margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.15);
+            box-shadow: inset 0 1px 1px rgba(255,255,255,0.2);
+            align-self: flex-start;
         }
 
-        /* Features List */
-        .feature-grid {
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px 36px;
+            border-radius: var(--radius-pill);
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            background: var(--color-white);
+            color: var(--color-black);
+            box-shadow: 0 10px 30px rgba(255,255,255,0.2);
+            transition: all var(--duration-fast) var(--ease-out-expo);
+            cursor: pointer;
+            gap: 12px;
+            align-self: flex-start;
+            text-decoration: none;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.03);
+            box-shadow: 0 15px 40px rgba(255,255,255,0.3);
+            background: #f5f5f7;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.97);
+        }
+
+        /* Divider */
+        .glass-divider {
+            height: 1px;
+            width: 100%;
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0) 100%);
+            border: none;
+            margin: 0;
+        }
+
+        /* Creators & Contacts Unified Grid */
+        .info-grid-unified {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 24px;
-            margin-top: 16px;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
         }
 
-        .feature-item {
+        /* Creator Sub-section */
+        .creator-block {
             display: flex;
-            align-items: flex-start;
+            flex-direction: column;
             gap: 20px;
-            padding: 24px;
+        }
+
+        .creator-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
             background: rgba(0,0,0,0.2);
             border-radius: var(--radius-md);
             border: 1px solid rgba(255,255,255,0.05);
-            transition: background var(--duration-fast);
+            transition: transform var(--duration-fast), background var(--duration-fast);
         }
 
-        .feature-item:hover {
+        .creator-item:hover {
+            transform: translateX(8px);
             background: rgba(255,255,255,0.03);
         }
 
-        .feature-icon {
-            flex-shrink: 0;
-            width: 48px;
-            height: 48px;
-            background: rgba(255,255,255,0.1);
-            border-radius: var(--radius-sm);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--color-white);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .feature-icon svg {
-            width: 24px;
-            height: 24px;
-            stroke-width: 1.5;
-        }
-
-        .feature-content h4 {
-            margin-bottom: 8px;
-        }
-
-        /* Creators Grid */
-        .creator-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-            margin-top: 16px;
-        }
-
-        .creator-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            padding: 40px 24px;
-            background: rgba(0,0,0,0.2);
-            border-radius: var(--radius-md);
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: transform var(--duration-normal) var(--ease-out-expo);
-        }
-
-        .creator-card:hover {
-            transform: translateY(-8px);
-            background: rgba(255,255,255,0.02);
-            border-color: rgba(255,255,255,0.1);
-        }
-
         .avatar-ring {
-            width: 100px;
-            height: 100px;
+            width: 64px;
+            height: 64px;
             border-radius: 50%;
-            padding: 4px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.1));
-            margin-bottom: 24px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            padding: 2px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.2));
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            flex-shrink: 0;
         }
 
         .creator-avatar {
@@ -479,51 +413,13 @@
             height: 100%;
             border-radius: 50%;
             object-fit: cover;
-            background-color: var(--color-gray-800); /* Fallback */
+            background-color: var(--color-gray-800);
         }
 
-        /* Tech Specs Table */
-        .specs-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 16px;
-        }
-
-        .specs-row {
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .specs-row:last-child {
-            border-bottom: none;
-        }
-
-        .specs-label {
-            padding: 24px 0;
-            width: 40%;
-            color: var(--color-white);
-            font-weight: 600;
-            font-size: 17px;
-            vertical-align: top;
-        }
-
-        .specs-value {
-            padding: 24px 0;
-            color: var(--text-secondary);
-            font-size: 17px;
-            line-height: 1.5;
-        }
-
-        /* Contact Box */
-        .contact-box {
+        /* Contact Sub-section */
+        .contact-block {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 32px;
-            background: rgba(255,255,255,0.05);
-            border-radius: var(--radius-md);
-            border: 1px solid rgba(255,255,255,0.1);
-            margin-top: 16px;
-            flex-wrap: wrap;
+            flex-direction: column;
             gap: 20px;
         }
 
@@ -531,20 +427,58 @@
             display: flex;
             align-items: center;
             gap: 16px;
+            padding: 20px;
+            background: rgba(255,255,255,0.03);
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all var(--duration-fast);
         }
 
-        .contact-item a {
-            font-size: 20px;
+        .contact-item:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .contact-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--color-white);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-black);
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .contact-icon svg {
+            width: 22px;
+            height: 22px;
+            stroke-width: 2;
+        }
+
+        .contact-text a {
+            font-size: 16px;
             font-weight: 600;
             color: var(--color-white);
-            text-decoration: underline;
-            text-decoration-color: rgba(255,255,255,0.3);
-            text-underline-offset: 4px;
-            transition: text-decoration-color var(--duration-fast);
+            text-decoration: none;
+            position: relative;
         }
 
-        .contact-item a:hover {
-            text-decoration-color: var(--color-white);
+        .contact-text a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: rgba(255,255,255,0.3);
+            transition: background-color var(--duration-fast);
+        }
+
+        .contact-text a:hover::after {
+            background-color: var(--color-white);
         }
 
         /* ==========================================================================
@@ -552,8 +486,8 @@
            ========================================================================== */
         .reveal-element {
             opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+            transform: translateY(20px);
+            transition: opacity 1s var(--ease-out-expo), transform 1s var(--ease-out-expo);
             will-change: opacity, transform;
         }
 
@@ -562,15 +496,24 @@
             transform: translateY(0);
         }
 
-        /* Stagger delays */
         .delay-1 { transition-delay: 0.1s; }
         .delay-2 { transition-delay: 0.2s; }
         .delay-3 { transition-delay: 0.3s; }
+        .delay-4 { transition-delay: 0.4s; }
 
         /* ==========================================================================
            9. RESPONSIVE DESIGN
            ========================================================================== */
+        @media (max-width: 1200px) {
+            .info-grid-unified {
+                grid-template-columns: 1fr;
+            }
+        }
+
         @media (max-width: 1024px) {
+            body {
+                align-items: flex-start;
+            }
             :root {
                 --layout-left-col: 100%;
                 --layout-padding: 24px;
@@ -580,15 +523,18 @@
             }
             .col-left {
                 position: relative;
-                height: 60vh;
-                min-height: 500px;
+                height: auto;
+                min-height: 60vh;
                 padding-bottom: 0;
+                z-index: 10;
             }
             .col-right {
                 width: 100%;
                 padding-top: var(--layout-gap);
+                padding-bottom: 40px;
+                z-index: 20;
             }
-            .content-panel {
+            .unified-panel {
                 padding: 32px;
             }
             .text-hero {
@@ -596,21 +542,19 @@
             }
         }
 
-        @media (max-width: 768px) {
-            .contact-box {
-                flex-direction: column;
-                align-items: flex-start;
+        @media (max-width: 480px) {
+            .unified-panel {
+                padding: 24px;
             }
-            .specs-label, .specs-value {
-                display: block;
+            .text-hero {
+                font-size: 36px;
+            }
+            .btn-primary {
                 width: 100%;
-                padding: 12px 0;
             }
-            .specs-row {
-                padding: 12px 0;
-            }
-            .specs-label {
-                padding-bottom: 4px;
+            .price-badge {
+                width: 100%;
+                text-align: center;
             }
         }
     </style>
@@ -623,7 +567,7 @@
     <div class="master-container">
         
         <aside class="col-left">
-            <div class="poster-showcase liquid-glass reveal-element is-visible">
+            <div class="poster-showcase liquid-glass reveal-element is-visible" id="tilt-poster">
                 <div class="poster-glow"></div>
                 <div class="poster-image-wrapper">
                     <img src="Poster.png" alt="Squirrel Water Squirter" class="poster-image" 
@@ -634,132 +578,76 @@
 
         <main class="col-right">
             
-            <section class="content-panel panel-hero liquid-glass reveal-element">
-                <span class="text-caption delay-1 reveal-element">Stop Squirrel Climb</span>
-                <h1 class="text-hero text-hero-gradient delay-2 reveal-element">Squirrel<br>Water Squirter.</h1>
-                <p class="text-body-large delay-3 reveal-element" style="max-width: 500px;">
-                    Secure your fruit. Save your harvest. The ultimate professional-grade, motion-activated defense system designed in Berkeley.
-                </p>
+            <section class="unified-panel liquid-glass reveal-element">
                 
-                <div class="reveal-element delay-3" style="margin-top: 32px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap;">
-                    <div class="price-badge" style="margin: 0;">$28.99</div>
-                    <a href="sms:5103128640" class="btn btn-primary">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-                        Order via Text
-                    </a>
-                </div>
-            </section>
-
-            <section class="content-panel liquid-glass reveal-element">
-                <span class="text-caption">Engineering</span>
-                <h2 class="text-title-1">Effortless. Easy. Setup.</h2>
-                <p class="text-body-large">A completely humane deterrent. A sudden burst of water safely startles squirrels away from your hard-earned fruit harvest.</p>
-                
-                <div class="feature-grid">
-                    <div class="feature-item">
-                        <div class="feature-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-                        </div>
-                        <div class="feature-content">
-                            <h4 class="text-headline">Motion-Activated Precision</h4>
-                            <p class="text-body">Advanced sensors detect pest movement instantly, deploying a targeted water burst without delay.</p>
-                        </div>
-                    </div>
-
-                    <div class="feature-item">
-                        <div class="feature-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-                        </div>
-                        <div class="feature-content">
-                            <h4 class="text-headline">Zero Harm Guarantee</h4>
-                            <p class="text-body">100% humane. No traps, no toxins. Just a safe, sudden splash of water to keep your ecosystem balanced.</p>
-                        </div>
-                    </div>
-
-                    <div class="feature-item">
-                        <div class="feature-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-                        </div>
-                        <div class="feature-content">
-                            <h4 class="text-headline">Modular 3D-Printed Build</h4>
-                            <p class="text-body">Constructed with high-durability PETG materials, ensuring longevity against weather and wildlife.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="content-panel liquid-glass reveal-element">
-                <span class="text-caption">Technical Specifications</span>
-                <h2 class="text-title-2">Built for Performance.</h2>
-                
-                <table class="specs-table">
-                    <tbody>
-                        <tr class="specs-row">
-                            <td class="specs-label">Mounting System</td>
-                            <td class="specs-value">Universal tree-trunk adaptability via custom baffle design. Sets up in minutes.</td>
-                        </tr>
-                        <tr class="specs-row">
-                            <td class="specs-label">Manufacturing</td>
-                            <td class="specs-value">Engineered and prototyped in Berkeley, California using precision 3D printing technology.</td>
-                        </tr>
-                        <tr class="specs-row">
-                            <td class="specs-label">Target Application</td>
-                            <td class="specs-value">Fruit trees, bird feeders, and raised garden beds experiencing high squirrel traffic.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </section>
-
-            <section class="content-panel liquid-glass reveal-element">
-                <span class="text-caption">The Team</span>
-                <h2 class="text-title-1">Meet the Creators.</h2>
-                <p class="text-body-large">The engineering minds behind Stop Squirrel Climb.</p>
-
-                <div class="creator-grid">
-                    <div class="creator-card">
-                        <div class="avatar-ring">
-                            <img src="Jaap.jpg" alt="Jaap Thind" class="creator-avatar" 
-                                 onerror="this.src='data:image/svg+xml;utf8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'50\' fill=\'%23444\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-family=\'sans-serif\' font-size=\'20\' fill=\'%23fff\' text-anchor=\'middle\' dy=\'.3em\'%3EJaap%3C/text%3E%3C/svg%3E'">
-                        </div>
-                        <h3 class="text-title-3" style="margin-bottom: 8px;">Hi, I'm Jaap.</h3>
-                        <p class="text-body">I designed this Water Squirter right here in Berkeley to save my dad's fruit trees from neighborhood squirrels. Now, I also want to protect your trees.</p>
-                    </div>
-
-                    <div class="creator-card">
-                        <div class="avatar-ring">
-                            <img src="Sevak.png" alt="Sevak Singh" class="creator-avatar"
-                                 onerror="this.src='data:image/svg+xml;utf8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'50\' fill=\'%23444\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-family=\'sans-serif\' font-size=\'20\' fill=\'%23fff\' text-anchor=\'middle\' dy=\'.3em\'%3ESevak%3C/text%3E%3C/svg%3E'">
-                        </div>
-                        <h3 class="text-title-3" style="margin-bottom: 8px;">Hi, I'm Sevak.</h3>
-                        <p class="text-body">I joined Jaap recently to help engineer and develop a better, more robust version for widespread garden use.</p>
-                    </div>
-                </div>
-            </section>
-
-            <section class="content-panel liquid-glass reveal-element" style="align-items: center; text-align: center;">
-                <h2 class="text-title-1">Ready to protect your harvest?</h2>
-                <p class="text-body-large" style="margin-bottom: 16px;">Schedule your Payment + Shipping today.</p>
-                
-                <div class="contact-box" style="width: 100%;">
-                    <div class="contact-item">
-                        <div class="feature-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-                        </div>
-                        <div>
-                            <span class="text-caption" style="display:block; text-align:left;">Text Us</span>
-                            <a href="sms:5103128640">510-312-8640</a>
-                        </div>
-                    </div>
+                <div class="panel-hero-section">
+                    <span class="text-caption delay-1 reveal-element">Stop Squirrel Climb</span>
+                    <h1 class="text-hero text-hero-gradient delay-1 reveal-element">Squirrel<br>Water Squirter.</h1>
+                    <p class="text-body-large delay-2 reveal-element">
+                        Secure your fruit. Save your harvest. The ultimate professional-grade defense system designed in Berkeley.
+                    </p>
                     
-                    <div class="contact-item">
-                        <div class="feature-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    <div class="delay-2 reveal-element" style="margin-top: 16px; display: flex; flex-direction: column; gap: 20px;">
+                        <div class="price-badge">$28.99</div>
+                        <a href="sms:5103128640" class="btn-primary">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                            Order via Text
+                        </a>
+                    </div>
+                </div>
+
+                <hr class="glass-divider delay-3 reveal-element">
+
+                <div class="info-grid-unified delay-3 reveal-element">
+                    
+                    <div class="creator-block">
+                        <span class="text-caption">The Creators</span>
+                        
+                        <div class="creator-item">
+                            <div class="avatar-ring">
+                                <img src="Jaap.jpg" alt="Jaap" class="creator-avatar" onerror="this.src='data:image/svg+xml;utf8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'50\' fill=\'%23444\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-family=\'sans-serif\' font-size=\'20\' fill=\'%23fff\' text-anchor=\'middle\' dy=\'.3em\'%3EJaap%3C/text%3E%3C/svg%3E'">
+                            </div>
+                            <div>
+                                <h3 class="text-title-3">Jaap</h3>
+                                <p class="text-body" style="font-size: 13px;">Designed in Berkeley to save family fruit trees.</p>
+                            </div>
                         </div>
-                        <div>
-                            <span class="text-caption" style="display:block; text-align:left;">Email Us</span>
-                            <a href="mailto:stopsquirrelclimb@gmail.com">stopsquirrelclimb@gmail.com</a>
+
+                        <div class="creator-item">
+                            <div class="avatar-ring">
+                                <img src="Sevak.png" alt="Sevak" class="creator-avatar" onerror="this.src='data:image/svg+xml;utf8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'50\' fill=\'%23444\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-family=\'sans-serif\' font-size=\'20\' fill=\'%23fff\' text-anchor=\'middle\' dy=\'.3em\'%3ESevak%3C/text%3E%3C/svg%3E'">
+                            </div>
+                            <div>
+                                <h3 class="text-title-3">Sevak</h3>
+                                <p class="text-body" style="font-size: 13px;">Partnering to engineer robust hardware.</p>
+                            </div>
                         </div>
                     </div>
+
+                    <div class="contact-block">
+                        <span class="text-caption">Schedule Setup</span>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                            </div>
+                            <div class="contact-text">
+                                <span class="text-caption" style="display:block;">Phone</span>
+                                <a href="sms:5103128640">510-312-8640</a>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                            </div>
+                            <div class="contact-text">
+                                <span class="text-caption" style="display:block;">Email</span>
+                                <a href="mailto:stopsquirrelclimb@gmail.com">stopsquirrelclimb@gmail.com</a>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </section>
 
@@ -769,89 +657,53 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
-            // --- 1. Intersection Observer for Smooth Reveal Animations ---
-            const observerOptions = {
-                root: null,
-                rootMargin: '0px 0px -10% 0px', // Trigger slightly before it comes into view
-                threshold: 0.1
-            };
-
-            const observer = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        // Optional: Unobserve after reveal to keep it visible
-                        // observer.unobserve(entry.target); 
-                    }
-                });
-            }, observerOptions);
-
-            document.querySelectorAll('.reveal-element').forEach(el => {
-                // Ignore elements that are already visible (like the left panel)
-                if (!el.classList.contains('is-visible')) {
-                    observer.observe(el);
-                }
-            });
-
-            // Immediately trigger above-the-fold elements
+            // --- 1. Reveal Animations ---
+            const revealElements = document.querySelectorAll('.reveal-element');
             setTimeout(() => {
-                document.querySelectorAll('.reveal-element').forEach(el => {
-                    const rect = el.getBoundingClientRect();
-                    if (rect.top < window.innerHeight) {
-                        el.classList.add('is-visible');
-                    }
-                });
+                revealElements.forEach(el => el.classList.add('is-visible'));
             }, 100);
 
-            // --- 2. Advanced iOS Rainbow Mesh Background (Canvas WebGL Simulation) ---
-            // This creates the "Apple Siri/Monterey" style fluid blur background
+            // --- 2. Advanced iOS Rainbow Mesh Background ---
             const canvas = document.getElementById('ambient-canvas');
             const ctx = canvas.getContext('2d');
             
             let width, height;
-            let time = 0;
-
-            // Define vibrant iOS colors
+            
             const colors = [
-                { r: 255, g: 42,  b: 95  }, // Pink/Red
+                { r: 255, g: 42,  b: 95  }, // Red/Pink
                 { r: 255, g: 122, b: 0   }, // Orange
                 { r: 52,  g: 199, b: 89  }, // Green
                 { r: 0,   g: 210, b: 255 }, // Cyan
-                { r: 88,  g: 86,  b: 214 }  // Purple
+                { r: 88,  g: 86,  b: 214 }, // Purple
+                { r: 255, g: 204, b: 0   }  // Yellow
             ];
 
-            // Orbs represent the glowing nodes of color
             class Orb {
-                constructor(x, y, radius, colorIdx, speedX, speedY) {
-                    this.x = x;
-                    this.y = y;
-                    this.baseRadius = radius;
-                    this.radius = radius;
+                constructor(colorIdx) {
                     this.color = colors[colorIdx];
-                    this.speedX = speedX;
-                    this.speedY = speedY;
                     this.angle = Math.random() * Math.PI * 2;
+                    this.speed = 0.001 + Math.random() * 0.002;
+                    this.radiusMult = 0.6 + Math.random() * 0.4;
+                    this.offsetX = Math.random() * 1000;
+                    this.offsetY = Math.random() * 1000;
                 }
 
-                update() {
-                    // Gentle floating motion
-                    this.x += this.speedX;
-                    this.y += this.speedY;
-                    this.angle += 0.02;
-
-                    // Pulsate radius slightly
-                    this.radius = this.baseRadius + Math.sin(this.angle) * (this.baseRadius * 0.1);
-
-                    // Bounce off walls smoothly
-                    if (this.x < -this.radius || this.x > width + this.radius) this.speedX *= -1;
-                    if (this.y < -this.radius || this.y > height + this.radius) this.speedY *= -1;
+                update(time) {
+                    const minDim = Math.min(width, height);
+                    this.radius = minDim * this.radiusMult * 1.5;
+                    
+                    // Complex Lissajous curve for organic movement
+                    const nx = Math.sin(time * this.speed + this.offsetX);
+                    const ny = Math.cos(time * (this.speed * 1.2) + this.offsetY);
+                    
+                    this.x = (width / 2) + nx * (width * 0.4);
+                    this.y = (height / 2) + ny * (height * 0.4);
                 }
 
                 draw(ctx) {
-                    // Create radial gradient for smooth blending
                     const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius);
-                    gradient.addColorStop(0, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0.8)`);
-                    gradient.addColorStop(0.5, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0.3)`);
+                    gradient.addColorStop(0, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0.85)`);
+                    gradient.addColorStop(0.4, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0.4)`);
                     gradient.addColorStop(1, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0)`);
                     
                     ctx.beginPath();
@@ -864,7 +716,6 @@
             let orbs = [];
 
             function initCanvas() {
-                // Handle high-DPI displays
                 const dpr = window.devicePixelRatio || 1;
                 width = window.innerWidth;
                 height = window.innerHeight;
@@ -876,61 +727,75 @@
                 canvas.style.width = `${width}px`;
                 canvas.style.height = `${height}px`;
 
-                // Create Orbs based on screen size
                 orbs = [];
-                const minDim = Math.min(width, height);
-                const baseRadius = minDim * 0.6; // Very large for heavy blur effect
-
-                orbs.push(new Orb(width * 0.2, height * 0.2, baseRadius, 0, 0.5, 0.3));
-                orbs.push(new Orb(width * 0.8, height * 0.3, baseRadius * 1.2, 1, -0.4, 0.6));
-                orbs.push(new Orb(width * 0.5, height * 0.8, baseRadius * 0.9, 2, 0.6, -0.4));
-                orbs.push(new Orb(width * 0.1, height * 0.9, baseRadius * 1.1, 3, 0.3, -0.5));
-                orbs.push(new Orb(width * 0.9, height * 0.9, baseRadius * 1.3, 4, -0.5, -0.3));
+                for(let i=0; i<colors.length; i++) {
+                    orbs.push(new Orb(i));
+                }
             }
 
+            let animationTime = 0;
             function animateCanvas() {
-                // Clear with deep dark color to maintain contrast for text
-                ctx.fillStyle = '#050505';
+                animationTime += 16; 
+                ctx.fillStyle = '#030303';
                 ctx.fillRect(0, 0, width, height);
-
-                // Setting global composite operation to lighten creates vivid overlaps
                 ctx.globalCompositeOperation = 'screen';
 
                 orbs.forEach(orb => {
-                    orb.update();
+                    orb.update(animationTime);
                     orb.draw(ctx);
                 });
 
-                // Reset composite
                 ctx.globalCompositeOperation = 'source-over';
-
                 requestAnimationFrame(animateCanvas);
             }
 
-            // Initialization & Event Listeners
             initCanvas();
-            
-            // Respect user motion preferences
             const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
             if (!prefersReducedMotion.matches) {
                 animateCanvas();
             } else {
-                // Draw static frame if reduced motion is requested
-                orbs.forEach(orb => orb.draw(ctx));
+                orbs.forEach(orb => {
+                    orb.update(0);
+                    orb.draw(ctx);
+                });
             }
 
             window.addEventListener('resize', () => {
-                // Debounce resize
                 clearTimeout(window.resizeTimer);
-                window.resizeTimer = setTimeout(() => {
-                    initCanvas();
-                    if (prefersReducedMotion.matches) {
-                        ctx.fillStyle = '#050505';
-                        ctx.fillRect(0, 0, width, height);
-                        orbs.forEach(orb => orb.draw(ctx));
-                    }
-                }, 250);
+                window.resizeTimer = setTimeout(initCanvas, 250);
             });
+
+            // --- 3. Vanilla 3D Tilt Effect for Poster ---
+            const tiltBox = document.getElementById('tilt-poster');
+            const tiltMax = 10; 
+
+            if(window.matchMedia("(hover: hover)").matches && !prefersReducedMotion.matches) {
+                tiltBox.addEventListener('mousemove', (e) => {
+                    const rect = tiltBox.getBoundingClientRect();
+                    const width = tiltBox.offsetWidth;
+                    const height = tiltBox.offsetHeight;
+                    const centerX = rect.left + width / 2;
+                    const centerY = rect.top + height / 2;
+                    
+                    const mouseX = e.clientX - centerX;
+                    const mouseY = e.clientY - centerY;
+                    
+                    const rotateX = (mouseY / (height / 2)) * -tiltMax;
+                    const rotateY = (mouseX / (width / 2)) * tiltMax;
+
+                    tiltBox.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                    tiltBox.style.transition = 'transform 0.1s ease-out';
+                });
+
+                tiltBox.addEventListener('mouseleave', () => {
+                    tiltBox.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+                    tiltBox.style.transition = 'transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                });
+                
+                tiltBox.addEventListener('mouseenter', () => {
+                    tiltBox.style.transition = 'transform 0.1s ease-out';
+                });
+            }
 
         });
     </script>
