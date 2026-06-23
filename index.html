@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#000000">
-    <title>Squirrel Water Squirter</title>
+    <title>Squirrel Water Squirter - Stop Squirrel Climb</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -43,21 +43,21 @@
             --glass-bg-light: rgba(255, 255, 255, 0.05);
             --glass-bg-highlight: rgba(255, 255, 255, 0.1);
             
-            --glass-blur-extreme: blur(100px);
-            --glass-blur-heavy: blur(60px);
+            --glass-blur-extreme: blur(120px);
+            --glass-blur-heavy: blur(80px);
             --glass-blur-medium: blur(40px);
             --glass-saturate: saturate(250%);
             
-            --glass-border-top: rgba(255, 255, 255, 0.2);
-            --glass-border-side: rgba(255, 255, 255, 0.08);
+            --glass-border-top: rgba(255, 255, 255, 0.25);
+            --glass-border-side: rgba(255, 255, 255, 0.1);
             --glass-border-bottom: rgba(0, 0, 0, 0.6);
             
             --glass-shadow-ambient: 0 40px 80px rgba(0, 0, 0, 0.5);
-            --glass-shadow-inner: inset 0 1px 1px rgba(255, 255, 255, 0.2), inset 0 -1px 1px rgba(0, 0, 0, 0.3);
+            --glass-shadow-inner: inset 0 1px 1px rgba(255, 255, 255, 0.25), inset 0 -1px 1px rgba(0, 0, 0, 0.4);
             
             /* Layout & Spacing */
             --layout-max-width: 1600px;
-            --layout-left-col: 45%;
+            --layout-left-col: 48%;
             --layout-gap: 32px;
             --layout-padding: 40px;
             
@@ -72,7 +72,6 @@
             /* Transitions */
             --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
             --ease-in-out-sine: cubic-bezier(0.445, 0.05, 0.55, 0.95);
-            --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
             --duration-fast: 0.2s;
             --duration-normal: 0.4s;
             --duration-slow: 0.8s;
@@ -100,12 +99,14 @@
         }
 
         body {
+            /* CRITICAL FIX: 
+               Removed flex/center on body so normal document flow is restored. 
+               This ensures window scrolling and position: sticky work flawlessly. 
+            */
+            display: block; 
             min-height: 100vh;
             overflow-x: hidden;
             overscroll-behavior-y: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         a { text-decoration: none; color: inherit; }
@@ -153,14 +154,15 @@
             box-shadow: var(--glass-shadow-ambient), var(--glass-shadow-inner);
             position: relative;
             overflow: hidden;
-            transform: translateZ(0);
+            transform: translateZ(0); /* Hardware acceleration */
         }
 
+        /* Ambient top reflection */
         .liquid-glass::after {
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0; height: 120px;
-            background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 100%);
+            background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
             pointer-events: none;
             z-index: 10;
         }
@@ -169,7 +171,7 @@
            5. TYPOGRAPHY
            ========================================================================== */
         .text-hero {
-            font-size: clamp(40px, 5vw, 72px);
+            font-size: clamp(40px, 4.5vw, 68px);
             line-height: 1.05;
             font-weight: 800;
             letter-spacing: -0.02em;
@@ -177,7 +179,7 @@
         }
 
         .text-hero-gradient {
-            background: linear-gradient(135deg, #ffffff 0%, rgba(255,255,255,0.7) 100%);
+            background: linear-gradient(135deg, #ffffff 0%, rgba(255,255,255,0.6) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -192,7 +194,7 @@
         }
 
         .text-body-large {
-            font-size: 22px;
+            font-size: 21px;
             line-height: 1.4;
             font-weight: 500;
             color: var(--text-secondary);
@@ -216,22 +218,22 @@
         }
 
         /* ==========================================================================
-           6. MASTER LAYOUT
+           6. SPLIT LAYOUT (LEFT FIXED, RIGHT SCROLLS)
            ========================================================================== */
         .master-container {
             display: flex;
+            align-items: flex-start; /* Crucial: ensures children can define their own heights and sticky works */
             width: 100%;
             max-width: var(--layout-max-width);
             margin: 0 auto;
-            min-height: 100vh;
-            align-items: center;
+            position: relative;
         }
 
-        /* --- LEFT COLUMN (FIXED POSTER) --- */
+        /* --- LEFT COLUMN: Strictly Locked --- */
         .col-left {
             width: var(--layout-left-col);
             height: 100vh;
-            position: sticky;
+            position: sticky; /* Locks it to the viewport */
             top: 0;
             display: flex;
             align-items: center;
@@ -243,13 +245,12 @@
         .poster-showcase {
             width: 100%;
             height: 100%;
-            max-height: 85vh;
+            max-height: 80vh; /* Keeps it perfectly proportioned */
             border-radius: var(--radius-xl);
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 40px;
-            transition: transform var(--duration-slow) var(--ease-out-expo);
             perspective: 1000px;
         }
 
@@ -286,13 +287,16 @@
             z-index: 1;
         }
 
-        /* --- RIGHT COLUMN (COMBINED SINGLE PANEL) --- */
+        /* --- RIGHT COLUMN: Scrolls Freely --- */
         .col-right {
             width: calc(100% - var(--layout-left-col));
+            /* Force scrolling by padding top and bottom significantly */
+            min-height: 120vh; 
+            padding: 15vh var(--layout-padding) 25vh var(--layout-padding);
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
-            padding: var(--layout-padding);
+            align-items: flex-start;
             z-index: 40;
         }
 
@@ -301,19 +305,20 @@
            ========================================================================== */
         .unified-panel {
             width: 100%;
-            max-width: 800px;
+            max-width: 720px;
             border-radius: var(--radius-xl);
-            padding: 48px;
+            padding: 56px 48px;
             display: flex;
             flex-direction: column;
-            gap: 40px;
+            gap: 48px;
+            margin: auto 0;
         }
 
         /* Hero Section Inside Panel */
         .panel-hero-section {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 24px;
         }
 
         .price-badge {
@@ -334,7 +339,7 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 18px 36px;
+            padding: 20px 40px;
             border-radius: var(--radius-pill);
             font-size: 18px;
             font-weight: 700;
@@ -372,32 +377,34 @@
         .info-grid-unified {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 32px;
+            gap: 40px;
         }
 
-        /* Creator Sub-section */
-        .creator-block {
+        /* Sub-sections */
+        .creator-block, .contact-block {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 24px;
         }
 
-        .creator-item {
+        .creator-item, .contact-item {
             display: flex;
             align-items: center;
             gap: 16px;
-            padding: 16px;
+            padding: 20px;
             background: rgba(0,0,0,0.2);
             border-radius: var(--radius-md);
             border: 1px solid rgba(255,255,255,0.05);
             transition: transform var(--duration-fast), background var(--duration-fast);
         }
 
-        .creator-item:hover {
+        .creator-item:hover, .contact-item:hover {
             transform: translateX(8px);
             background: rgba(255,255,255,0.03);
+            border-color: rgba(255,255,255,0.15);
         }
 
+        /* Avatars */
         .avatar-ring {
             width: 64px;
             height: 64px;
@@ -416,32 +423,10 @@
             background-color: var(--color-gray-800);
         }
 
-        /* Contact Sub-section */
-        .contact-block {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 20px;
-            background: rgba(255,255,255,0.03);
-            border-radius: var(--radius-md);
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: all var(--duration-fast);
-        }
-
-        .contact-item:hover {
-            background: rgba(255,255,255,0.08);
-            border-color: rgba(255,255,255,0.2);
-        }
-
+        /* Contact Icons */
         .contact-icon {
-            width: 44px;
-            height: 44px;
+            width: 48px;
+            height: 48px;
             background: var(--color-white);
             border-radius: 12px;
             display: flex;
@@ -482,7 +467,7 @@
         }
 
         /* ==========================================================================
-           8. ANIMATIONS & REVEALS
+           8. ANIMATIONS
            ========================================================================== */
         .reveal-element {
             opacity: 0;
@@ -511,15 +496,13 @@
         }
 
         @media (max-width: 1024px) {
-            body {
-                align-items: flex-start;
+            .master-container {
+                flex-direction: column;
+                align-items: center;
             }
             :root {
                 --layout-left-col: 100%;
                 --layout-padding: 24px;
-            }
-            .master-container {
-                flex-direction: column;
             }
             .col-left {
                 position: relative;
@@ -530,24 +513,21 @@
             }
             .col-right {
                 width: 100%;
-                padding-top: var(--layout-gap);
-                padding-bottom: 40px;
+                padding: var(--layout-gap) var(--layout-padding) 10vh var(--layout-padding);
+                min-height: auto;
                 z-index: 20;
             }
             .unified-panel {
-                padding: 32px;
-            }
-            .text-hero {
-                font-size: 48px;
+                padding: 40px 32px;
             }
         }
 
         @media (max-width: 480px) {
             .unified-panel {
-                padding: 24px;
+                padding: 32px 24px;
             }
             .text-hero {
-                font-size: 36px;
+                font-size: 42px;
             }
             .btn-primary {
                 width: 100%;
@@ -578,16 +558,16 @@
 
         <main class="col-right">
             
-            <section class="unified-panel liquid-glass reveal-element">
+            <section class="unified-panel liquid-glass reveal-element is-visible">
                 
                 <div class="panel-hero-section">
-                    <span class="text-caption delay-1 reveal-element">Stop Squirrel Climb</span>
-                    <h1 class="text-hero text-hero-gradient delay-1 reveal-element">Squirrel<br>Water Squirter.</h1>
-                    <p class="text-body-large delay-2 reveal-element">
+                    <span class="text-caption delay-1 reveal-element is-visible">Stop Squirrel Climb</span>
+                    <h1 class="text-hero text-hero-gradient delay-1 reveal-element is-visible">Squirrel<br>Water Squirter.</h1>
+                    <p class="text-body-large delay-2 reveal-element is-visible">
                         Secure your fruit. Save your harvest. The ultimate professional-grade defense system designed in Berkeley.
                     </p>
                     
-                    <div class="delay-2 reveal-element" style="margin-top: 16px; display: flex; flex-direction: column; gap: 20px;">
+                    <div class="delay-2 reveal-element is-visible" style="margin-top: 16px; display: flex; flex-direction: column; gap: 20px;">
                         <div class="price-badge">$28.99</div>
                         <a href="sms:5103128640" class="btn-primary">
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
@@ -596,9 +576,9 @@
                     </div>
                 </div>
 
-                <hr class="glass-divider delay-3 reveal-element">
+                <hr class="glass-divider delay-3 reveal-element is-visible">
 
-                <div class="info-grid-unified delay-3 reveal-element">
+                <div class="info-grid-unified delay-3 reveal-element is-visible">
                     
                     <div class="creator-block">
                         <span class="text-caption">The Creators</span>
@@ -609,7 +589,7 @@
                             </div>
                             <div>
                                 <h3 class="text-title-3">Jaap</h3>
-                                <p class="text-body" style="font-size: 13px;">Designed in Berkeley to save family fruit trees.</p>
+                                <p class="text-body" style="font-size: 14px;">Designed in Berkeley to save family fruit trees.</p>
                             </div>
                         </div>
 
@@ -619,7 +599,7 @@
                             </div>
                             <div>
                                 <h3 class="text-title-3">Sevak</h3>
-                                <p class="text-body" style="font-size: 13px;">Partnering to engineer robust hardware.</p>
+                                <p class="text-body" style="font-size: 14px;">Partnering to engineer robust hardware.</p>
                             </div>
                         </div>
                     </div>
@@ -657,18 +637,13 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
-            // --- 1. Reveal Animations ---
-            const revealElements = document.querySelectorAll('.reveal-element');
-            setTimeout(() => {
-                revealElements.forEach(el => el.classList.add('is-visible'));
-            }, 100);
-
-            // --- 2. Advanced iOS Rainbow Mesh Background ---
+            // --- Advanced iOS Rainbow Mesh Background ---
             const canvas = document.getElementById('ambient-canvas');
             const ctx = canvas.getContext('2d');
             
             let width, height;
             
+            // Highly vibrant Apple-esque gradient palette
             const colors = [
                 { r: 255, g: 42,  b: 95  }, // Red/Pink
                 { r: 255, g: 122, b: 0   }, // Orange
@@ -683,7 +658,7 @@
                     this.color = colors[colorIdx];
                     this.angle = Math.random() * Math.PI * 2;
                     this.speed = 0.001 + Math.random() * 0.002;
-                    this.radiusMult = 0.6 + Math.random() * 0.4;
+                    this.radiusMult = 0.6 + Math.random() * 0.5;
                     this.offsetX = Math.random() * 1000;
                     this.offsetY = Math.random() * 1000;
                 }
@@ -765,9 +740,9 @@
                 window.resizeTimer = setTimeout(initCanvas, 250);
             });
 
-            // --- 3. Vanilla 3D Tilt Effect for Poster ---
+            // --- Subtle 3D Tilt Effect for Poster ---
             const tiltBox = document.getElementById('tilt-poster');
-            const tiltMax = 10; 
+            const tiltMax = 12; // Degrees 
 
             if(window.matchMedia("(hover: hover)").matches && !prefersReducedMotion.matches) {
                 tiltBox.addEventListener('mousemove', (e) => {
@@ -783,12 +758,12 @@
                     const rotateX = (mouseY / (height / 2)) * -tiltMax;
                     const rotateY = (mouseX / (width / 2)) * tiltMax;
 
-                    tiltBox.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                    tiltBox.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
                     tiltBox.style.transition = 'transform 0.1s ease-out';
                 });
 
                 tiltBox.addEventListener('mouseleave', () => {
-                    tiltBox.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+                    tiltBox.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg)';
                     tiltBox.style.transition = 'transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
                 });
                 
