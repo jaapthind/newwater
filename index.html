@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#020202">
-    <title>Squirrel Water Squirter - Stop Squirrel Climb</title>
+    <title>Squirrel Squirter - Stop Squirrel Climb</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%232e7d32'/><text x='50' y='45' font-size='40' text-anchor='middle'>💧</text><text x='50' y='85' font-size='40' text-anchor='middle'>🐿️</text></svg>">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -578,7 +578,7 @@
                 
                 <div class="header-area">
                     <span class="text-caption reveal d-1">Stop Squirrel Climb</span>
-                    <h1 class="text-display text-display-gradient reveal d-1">Squirrel<br>Water Squirter.</h1>
+                    <h1 class="text-display text-display-gradient reveal d-1">Squirrel<br>Squirter</h1>
                     <p class="text-body-large reveal d-2">
                         Secure your fruit. Save your harvest. The ultimate professional-grade defense system designed in Berkeley.
                     </p>
@@ -652,7 +652,7 @@
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
                             </div>
                             <div class="item-content">
-                                <span class="text-caption">Phone</span>
+                                <span class="text-caption">Text</span>
                                 <a href="sms:5103128640" class="item-link">510-312-8640</a>
                             </div>
                         </div>
@@ -715,14 +715,46 @@
             let width, height;
             
             // Refined dark-mode neon color palette
-            const colors = [
-                { r: 255, g: 42,  b: 95  }, // Red/Pink
-                { r: 255, g: 122, b: 0   }, // Orange
-                { r: 52,  g: 199, b: 89  }, // Green
-                { r: 0,   g: 210, b: 255 }, // Cyan
-                { r: 88,  g: 86,  b: 214 }, // Purple
-                { r: 32,  g: 32,  b: 40  }  // Dark Blue/Grey base
-            ];
+                   const colors = [
+            // --- Liquid Glass Neons & Vibrants ---
+            { r: 255, g: 42,  b: 95  }, // Original Red/Pink
+            { r: 255, g: 0,   b: 128 }, // Hot Magenta
+            { r: 244, g: 54,  b: 244 }, // Electric Orchid
+            { r: 186, g: 85,  b: 211 }, // Medium Orchid
+        
+            // --- Purples & Indigos ---
+            { r: 88,  g: 86,  b: 214 }, // Original Purple
+            { r: 142, g: 68,  b: 173 }, // Royal Amethyst
+            { r: 74,  g: 20,  b: 140 }, // Deep Cyber Violet
+            { r: 63,  g: 81,  b: 181 }, // Vivid Indigo
+        
+            // --- Electric Blues & Cyans ---
+            { r: 0,   g: 210, b: 255 }, // Original Cyan
+            { r: 0,   g: 122, b: 255 }, // Bright Electric Blue
+            { r: 26,  g: 115, b: 232 }, // Google Blue Accent
+            { r: 0,   g: 242, b: 254 }, // Laser Aqua
+            { r: 79,  g: 172, b: 254 }, // Sky Glass Blue
+        
+            // --- Greens & Mints ---
+            { r: 52,  g: 199, b: 89  }, // Original Green
+            { r: 0,   g: 230, b: 118 }, // Spring Neon Green
+            { r: 46,  g: 204, b: 113 }, // Emerald Mint
+            { r: 105, g: 240, b: 174 }, // Light Turquoise/Seafoam
+        
+            // --- Yellows, Oranges & Golds ---
+            { r: 255, g: 122, b: 0   }, // Original Orange
+            { r: 255, g: 159, b: 10  }, // Bright Amber
+            { r: 255, g: 214, b: 0   }, // Vivid Yellow / Gold
+            { r: 255, g: 107, b: 107 }, // Soft Coral Red
+            { r: 255, g: 71,  b: 87  }, // Coral Pink
+        
+            // --- Premium Dark & Matte Gradients (Bases) ---
+            { r: 32,  g: 32,  b: 40  }, // Original Dark Blue/Grey base
+            { r: 18,  g: 18,  b: 24  }, // Deep Midnight Matte
+            { r: 44,  g: 62,  b: 80  }, // Asbestos Blue/Grey
+            { r: 30,  g: 41,  b: 59  }, // Slate Grey
+            { r: 15,  g: 23,  b: 42  }  // Deep Obsidian
+        ];
 
             class Orb {
                 constructor(colorIdx) {
