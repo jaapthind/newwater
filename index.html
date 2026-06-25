@@ -42,8 +42,8 @@
             --glass-saturate: saturate(180%);
             
             /* Outer Borders (Crisp & Clear) */
-            --glass-border-top: rgba(255, 255, 255, 0.35);
-            --glass-border-left: rgba(255, 255, 255, 0.25);
+            --glass-border-top: rgba(255, 255, 255, 0.65);
+            --glass-border-left: rgba(255, 255, 255, 0.45);
             --glass-border-right: rgba(255, 255, 255, 0.1);
             --glass-border-bottom: rgba(255, 255, 255, 0.05);
             
@@ -715,46 +715,14 @@
             let width, height;
             
             // Refined dark-mode neon color palette
-                   const colors = [
-            // --- Liquid Glass Neons & Vibrants ---
-            { r: 255, g: 42,  b: 95  }, // Original Red/Pink
-            { r: 255, g: 0,   b: 128 }, // Hot Magenta
-            { r: 244, g: 54,  b: 244 }, // Electric Orchid
-            { r: 186, g: 85,  b: 211 }, // Medium Orchid
-        
-            // --- Purples & Indigos ---
-            { r: 88,  g: 86,  b: 214 }, // Original Purple
-            { r: 142, g: 68,  b: 173 }, // Royal Amethyst
-            { r: 74,  g: 20,  b: 140 }, // Deep Cyber Violet
-            { r: 63,  g: 81,  b: 181 }, // Vivid Indigo
-        
-            // --- Electric Blues & Cyans ---
-            { r: 0,   g: 210, b: 255 }, // Original Cyan
-            { r: 0,   g: 122, b: 255 }, // Bright Electric Blue
-            { r: 26,  g: 115, b: 232 }, // Google Blue Accent
-            { r: 0,   g: 242, b: 254 }, // Laser Aqua
-            { r: 79,  g: 172, b: 254 }, // Sky Glass Blue
-        
-            // --- Greens & Mints ---
-            { r: 52,  g: 199, b: 89  }, // Original Green
-            { r: 0,   g: 230, b: 118 }, // Spring Neon Green
-            { r: 46,  g: 204, b: 113 }, // Emerald Mint
-            { r: 105, g: 240, b: 174 }, // Light Turquoise/Seafoam
-        
-            // --- Yellows, Oranges & Golds ---
-            { r: 255, g: 122, b: 0   }, // Original Orange
-            { r: 255, g: 159, b: 10  }, // Bright Amber
-            { r: 255, g: 214, b: 0   }, // Vivid Yellow / Gold
-            { r: 255, g: 107, b: 107 }, // Soft Coral Red
-            { r: 255, g: 71,  b: 87  }, // Coral Pink
-        
-            // --- Premium Dark & Matte Gradients (Bases) ---
-            { r: 32,  g: 32,  b: 40  }, // Original Dark Blue/Grey base
-            { r: 18,  g: 18,  b: 24  }, // Deep Midnight Matte
-            { r: 44,  g: 62,  b: 80  }, // Asbestos Blue/Grey
-            { r: 30,  g: 41,  b: 59  }, // Slate Grey
-            { r: 15,  g: 23,  b: 42  }  // Deep Obsidian
-        ];
+                 const colors = [
+                { r: 255, g: 42,  b: 95  }, // Red/Pink
+                { r: 255, g: 122, b: 0   }, // Orange
+                { r: 52,  g: 199, b: 89  }, // Green
+                { r: 0,   g: 210, b: 255 }, // Cyan
+                { r: 88,  g: 86,  b: 214 }, // Purple
+                { r: 32,  g: 32,  b: 40  }  // Dark Blue/Grey base
+            ];
 
             class Orb {
                 constructor(colorIdx) {
